@@ -28,14 +28,14 @@ To get started, you should have prior knowledge on **Python** and **Pytorch** at
 ### Version 1
 3. Download the [weights](https://drive.google.com/drive/folders/19r7GYrIvAVtZWhJ_mDchJWWnbLMCvXZi?usp=sharing) into `spelling_correction_v1`.
 
-4. Download the data [`english.txt`](http://www.manythings.org/anki/) into the `data/` folder in `spelling_correction_v1`. The correct path is `data/english.txt`.
+4. Download the data [`english.txt`](https://drive.google.com/file/d/1uVAKtFW5OXJMO1clhF_vDZYVwWa_FDTL/view?usp=sharing) into the `data/` folder in `spelling_correction_v1`. The correct path is `data/english.txt`.
 
 5. Run `python train.py` to train the model using Transformer architecture.
 
 6. Run `python api.py` to run the Front-end + Back-end Web Demo for this application. Share your results with me!
 
 ### Version 2
-3. Download the data [`english.txt`](http://www.manythings.org/anki/) into the `data/` folder in `spelling_correction_v1`. The correct path is `data/english.txt`.
+3. Download the data [`english.txt`](https://drive.google.com/file/d/1uVAKtFW5OXJMO1clhF_vDZYVwWa_FDTL/view?usp=sharing) into the `data/` folder in `spelling_correction_v1`. The correct path is `data/english.txt`.
 
 4. Run `python train.py` to train the model using GPT-2.
 
