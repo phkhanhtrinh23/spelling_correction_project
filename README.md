@@ -57,6 +57,8 @@ To get started, you should have prior knowledge on **Python** and **Pytorch** at
 
 <img src="./spelling_correction_v1/images/output.png"/>
 
+- Link to the [YouTube demonstration](https://youtu.be/J-JnNqeN9zU).
+
 
 ## Contribution
 
