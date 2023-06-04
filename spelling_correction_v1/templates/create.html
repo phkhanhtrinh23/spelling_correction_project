@@ -1,0 +1,39 @@
+<style>
+    .btn {
+      border: 2px solid black;
+      background-color: white;
+      color: black;
+      padding: 12px 12px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    
+    /* Blue */
+    .info {
+    border-color: #2196F3;
+    color: dodgerblue;
+    }
+
+    .info:hover {
+    background: #2196F3;
+    color: white;
+    }
+</style>
+
+{% extends 'base.html' %}
+
+{% block context %}
+    <div class='message'>
+        <form method="post">
+            <label for="text">Text</label>
+            <br>
+            <textarea name="text"
+                   placeholder="Text"
+                   rows="5"
+                   cols="60"
+                   >{{ request.form['text'] }}</textarea>
+            <br>
+            <button type="submit" class="btn info">Submit</button>
+        </form>
+    </div>
+{% endblock %}

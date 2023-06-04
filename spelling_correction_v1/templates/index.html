@@ -1,0 +1,36 @@
+<style>
+    .btn {
+      border: 2px solid black;
+      background-color: white;
+      color: black;
+      padding: 12px 12px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    
+    /* Green */
+    .success {
+      border-color: #04AA6D;
+      color: green;
+    }
+    
+    .success:hover {
+      background-color: #04AA6D;
+      color: white;
+    }
+</style>
+{% extends 'base.html' %}
+
+{% block heading %} Results {% endblock %}
+
+{% block context %}
+    {% for message in messages %}
+        <div class='message'>
+            <p>Text: {{ message['text'] }}</p>
+            <p>Answer: {{ message['answer'] }}</p>
+        </div>
+    {% endfor %}
+    <form action="{{ url_for('create') }}">
+        <input type="submit" value="Demo" class="btn success"/>
+    </form>
+{% endblock %}
