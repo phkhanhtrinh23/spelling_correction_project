@@ -1,7 +1,13 @@
 __pycache__/
 
-gpt2-medium/
+gpt2-medium*/
 
 logs/
 
 data/
+
+pretrained_checkpoints/
+
+logging_files/
+
+output.csv
