@@ -35,10 +35,10 @@ class EvalDataCollator:
 
     def load_dataset(self):
         filename = self.filename
-        info = dict()
         tokens_list, original_list, labels_list = [], [], []
+        info = {}
         with open(filename, "r", encoding="utf-8") as f:
-            for sentence in f.readlines():
+            for i, sentence in enumerate(f.readlines()):
                 # Remove unused character or punctuation
                 sentence = re.sub(r"[^0-9a-zA-Z' -]+","", sentence)
 
@@ -50,6 +50,9 @@ class EvalDataCollator:
                 tokens_list.append(corrupted + "[SEP]")
                 original_list.append(corrupted)
                 labels_list.append(sentence)
+                
+#                 if i == 0:
+#                     break
 
 #         sentences = [self.tokenizer.decode(tokens) for tokens in tokens_list]
         
@@ -83,6 +86,8 @@ def main(args):
                                        threshold=args.threshold)
     eval_dataset, info = eval_dataset.load_dataset()
     eval_dataset = datasets.Dataset.from_dict(eval_dataset)
+    print("Eval dataset:", eval_dataset[0])
+    
     eval_dataloader = DataLoader(
                 eval_dataset, 
                 collate_fn=default_data_collator,
@@ -140,6 +145,8 @@ def main(args):
                     logging.info(f'Output text: {output}')
                     logging.info(f'Label text: {label}')
                     logging.info("\n") # newline
+                
+                i = i + len(batch["input_ids"])
     wf.close()
        
 #     with open("output.txt", 'w') as f:
@@ -181,7 +188,7 @@ if __name__ == '__main__':
                         help='Output file')
 
     parser.add_argument('--log', type=str,
-                        default='./logs/inference_{datetime}.log',
+                        default='./logging_files/inference_{datetime}.log',
                         help='Log filename')
     parser.add_argument('--device', type=str, default='cuda',
                         help='{cuda, cpu}')
