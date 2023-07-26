@@ -11,11 +11,11 @@ import datasets
 from tqdm import tqdm
 
 from transformers import AutoTokenizer, AutoModelForCausalLM, GPT2Tokenizer, GPT2LMHeadModel, Trainer, TrainingArguments
-from transformers.integrations import TensorBoardCallback
+# from transformers.integrations import TensorBoardCallback
 from torch.utils.data import DataLoader
 from collator import DataCollatorCustom
 from transformers import default_data_collator, get_linear_schedule_with_warmup
-from torch.utils.tensorboard import SummaryWriter
+# from torch.utils.tensorboard import SummaryWriter
 import evaluate
 import shutil
 
@@ -77,7 +77,7 @@ def main(args):
     comparative_loss = -1
 
     for epoch in tqdm(range(args.num_epochs), position=0, desc="Epoch", leave=False):
-        model.train()
+#         model.train()
         train_loss = 0
         for batch in tqdm(train_dataloader, position=1, desc="Training", leave=False):
             batch = {k: v.to(device) for k, v in batch.items()}

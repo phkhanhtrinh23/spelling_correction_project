@@ -52,5 +52,5 @@ def make_misspelling(sentence, threshold):
             else:
                 pass
         i += 1
-
+    
     return misspellings

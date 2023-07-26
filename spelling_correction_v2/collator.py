@@ -38,7 +38,8 @@ class DataCollatorCustom:
 
     def load_dataset(self):
         tokens_list, labels_list = [], []
-        
+        attention_masks_list = []
+        encodings = {}
         with open(self.filename, "r", encoding="utf-8") as f:
             self.sentence_list = []
             for sentence in f.readlines():
@@ -51,23 +52,32 @@ class DataCollatorCustom:
             corrupted = make_misspelling(sentence, self.threshold)
 
             # Format the inputs
-            tokens, labels = self.formatting(corrupted, sentence)
-            if len(tokens) > 8:
-                tokens_list.append(tokens)
-                labels_list.append(labels)
+#             tokens, masks, labels = self.formatting(corrupted, sentence)
+            labels = self.formatting(sentence)
+            tokens_list.append(corrupted)
+#             attention_masks_list.append(masks)
+            labels_list.append(labels)
 
-        sentences = [self.tokenizer.decode(tokens) for tokens in tokens_list]
+#         sentences = [self.tokenizer.decode(tokens) for tokens in tokens_list]
 #         labels = [self.tokenizer.decode(labels) for labels in labels_list]
         
-        encodings = self.tokenizer(
-            sentences, return_tensors='pt', truncation=True,
-            padding='max_length', max_length=self.max_length)
+#         encodings = self.tokenizer(
+#             sentences, return_tensors='pt', truncation=True,
+#             padding='max_length', max_length=self.max_length)
         
 #         label_encodings = self.tokenizer(
 #             labels, return_tensors='pt', truncation=True,
 #             padding='max_length', max_length=self.max_length)
+        
+#         encodings["input_ids"] = torch.tensor(tokens_list)
+#         encodings["attention_mask"] = torch.tensor(attention_masks_list)
 
+        encodings = self.tokenizer(
+            tokens_list, return_tensors='pt', truncation=True,
+            padding='max_length', max_length=self.max_length)
         encodings["labels"] = torch.tensor(labels_list)
+        
+#         print("encodings:\n", encodings)
 
 #         self.input_ids = encodings['input_ids']
 #         self.attention_mask = encodings['attention_mask']
@@ -77,7 +87,7 @@ class DataCollatorCustom:
 
         return encodings
 
-    def formatting(self, input_text, target_text):
+    def formatting(self, target_text):
 #         input_tokens = self.tokenizer(input_text)["input_ids"]
 #         target_tokens = self.tokenizer(target_text)["input_ids"]
 
@@ -88,16 +98,29 @@ class DataCollatorCustom:
 #             + [-100] * (self.max_length - len(target_tokens) - 1)
 #         labels = labels[:self.max_length]
 
-        input_tokens = self.tokenizer.encode(input_text)
+#         input_tokens = self.tokenizer.encode(input_text)
         target_tokens = self.tokenizer.encode(target_text)
 
-        tokens = [self.tokenizer.bos_token_id] + input_tokens \
-            + [self.tokenizer.sep_token_id] + target_tokens \
-            + [self.tokenizer.eos_token_id]
-
-        labels = [-100] * (len(input_tokens) + 2) \
-            + target_tokens + [self.tokenizer.eos_token_id] \
-            + [-100] * (self.max_length - len(tokens))
-        labels = labels[:self.max_length]
+#         tokens = [self.tokenizer.bos_token_id] + input_tokens \
+#             + [self.tokenizer.sep_token_id] + target_tokens \
+#             + [self.tokenizer.eos_token_id]
+#         tokens = tokens + [self.tokenizer.pad_token_id] * (self.max_length - len(tokens))
+#         tokens = tokens[:self.max_length]
         
-        return tokens, labels
+#         attention_masks = [1] + [1] * len(input_tokens) + [1] \
+#                         + [1] * len(target_tokens) \
+#                         + [0] * (self.max_length - len(tokens))
+#         attention_masks = attention_masks[:self.max_length]
+
+#         labels = [-100] * (len(input_tokens) + 2) \
+#             + target_tokens + [self.tokenizer.eos_token_id] \
+#             + [-100] * (self.max_length - len(tokens))
+#         labels = labels[:self.max_length]
+        
+#         return tokens, attention_masks, labels
+        
+        labels = target_tokens + [self.tokenizer.eos_token_id] \
+            + [-100] * (self.max_length - len(target_tokens))
+        labels = labels[:self.max_length]
+
+        return labels

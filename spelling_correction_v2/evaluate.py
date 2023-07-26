@@ -46,27 +46,26 @@ class EvalDataCollator:
                 corrupted = make_misspelling(sentence, self.threshold)
 
                 # Format the inputs
-                tokens = self.formatting(corrupted + "[SEP]")
-                if len(tokens) > 5:
-                    tokens_list.append(tokens)
-                    original_list.append(corrupted)
-                    labels_list.append(sentence)
+#                 tokens = self.formatting(corrupted + "[SEP]")
+                tokens_list.append(corrupted + "[SEP]")
+                original_list.append(corrupted)
+                labels_list.append(sentence)
 
-        sentences = [self.tokenizer.decode(tokens) for tokens in tokens_list]
+#         sentences = [self.tokenizer.decode(tokens) for tokens in tokens_list]
         
-        encodings = self.tokenizer(
-            sentences, return_tensors='pt', truncation=True,
-            padding='max_length', max_length=self.max_length)
+        encodings = self.formatting(tokens_list)
         
         info["original"] = original_list
         info["labels"] = labels_list
         
         return encodings, info
     
-    def formatting(self, input_text):
-        input_tokens = self.tokenizer.encode(input_text)
+    def formatting(self, tokens_list):
+        tokens_list_encoded = self.tokenizer(
+            tokens_list, return_tensors='pt', truncation=True,
+            padding='max_length', max_length=self.max_length)
         
-        return input_tokens
+        return tokens_list_encoded
     
 def main(args):
     # Data preprocessing
@@ -88,7 +87,8 @@ def main(args):
                 eval_dataset, 
                 collate_fn=default_data_collator,
                 batch_size=args.batch_size, 
-                pin_memory=True
+                pin_memory=True,
+                shuffle=False,
             )
     print("Input:", eval_dataset["input_ids"][:10])
     print("Label:", info["labels"][:10])
@@ -199,7 +199,7 @@ if __name__ == '__main__':
 
     parser.add_argument('--model_name_or_path', type=str, default="gpt2-medium_new",
                         help='pretrained model name')
-    parser.add_argument('--max_length', type=int, default=128,
+    parser.add_argument('--max_length', type=int, default=32,
                         help='Maximum number of tokens for each sequence')
     parser.add_argument('--num_return_sequences', type=int, default=1,
                         help='Maximum number of return sequences')
