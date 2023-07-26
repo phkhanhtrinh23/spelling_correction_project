@@ -53,8 +53,8 @@ class DataCollatorCustom:
 
             # Format the inputs
 #             tokens, masks, labels = self.formatting(corrupted, sentence)
-            labels = self.formatting(corrupted, sentence)
-            tokens_list.append(corrupted)
+            labels = self.formatting(sentence)
+            tokens_list.append(corrupted + "[SEP]")
 #             attention_masks_list.append(masks)
             labels_list.append(labels)
 
@@ -87,7 +87,7 @@ class DataCollatorCustom:
 
         return encodings
 
-    def formatting(self, input_text, target_text):
+    def formatting(self, target_text):
 #         input_tokens = self.tokenizer(input_text)["input_ids"]
 #         target_tokens = self.tokenizer(target_text)["input_ids"]
 
@@ -98,7 +98,7 @@ class DataCollatorCustom:
 #             + [-100] * (self.max_length - len(target_tokens) - 1)
 #         labels = labels[:self.max_length]
 
-        input_tokens = self.tokenizer.encode(input_text)
+#         input_tokens = self.tokenizer.encode(input_text)
         target_tokens = self.tokenizer.encode(target_text)
 
 #         tokens = [self.tokenizer.bos_token_id] + input_tokens \

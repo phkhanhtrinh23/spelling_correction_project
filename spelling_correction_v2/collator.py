@@ -54,7 +54,7 @@ class DataCollatorCustom:
             # Format the inputs
 #             tokens, masks, labels = self.formatting(corrupted, sentence)
             labels = self.formatting(sentence)
-            tokens_list.append(corrupted)
+            tokens_list.append(corrupted + "[SEP]")
 #             attention_masks_list.append(masks)
             labels_list.append(labels)
 
